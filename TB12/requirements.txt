@@ -1,0 +1,4 @@
+streamlit
+matplotlib
+pandas  # falls du Pandas verwendest
+numpy   # falls du NumPy verwendest
