@@ -45,7 +45,7 @@ class Startseite(Page):
         Diese Anwendung besteht aus mehreren Modulen:
 
         ### 📊 Bilanzanalyse  
-        Erfasse Bilanzwerte für zwei Jahre, berechne Kennzahlen und exportiere alles als PDF.
+        Bilanzwerte für zwei Jahre, Kennzahlenberechnung und Export als PDF.
 
         ### 🔗 Linkliste  
         Eine Sammlung nützlicher Links.
@@ -398,12 +398,11 @@ class PageFactory:
 st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 #st.sidebar.title("📌 Navigation")
   #mit r werden die Slashes nicht interpretiert, oder \\
-#st.sidebar.image("LogoMT.png", width=120)
+st.sidebar.image("LogoMT.png", width=120)
 
 seiten = list(PageFactory._pages.keys())
 wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
-
 
