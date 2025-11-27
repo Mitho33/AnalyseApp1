@@ -380,7 +380,3 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
-
-
-
-
