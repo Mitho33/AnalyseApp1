@@ -1,4 +1,11 @@
-streamlit
-matplotlib
-pandas  # falls du Pandas verwendest
-numpy   # falls du NumPy verwendest
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+import io
+from abc import ABC, abstractmethod
+import numpy as np
+import yfinance as yf
+from datetime import datetime
+import time
+
