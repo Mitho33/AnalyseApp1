@@ -52,6 +52,9 @@ class Startseite(Page):
 
         ### 🧩 Indizes  
         Übersicht ausgewählter Indizes.
+        
+         ### 🧩 Impressum 
+        Impressum und Haftungsausschluss
         """)
 
 
@@ -234,7 +237,7 @@ class Linkliste(Page):
 # ---------------------------------------------------
 # Weitere Anwendung
 # ---------------------------------------------------
-class WeitereAnwendung(Page):
+class Indizes(Page):
     def render(self):
         st.title("🧩 Indizes")   
         st.set_page_config(page_title="Live Börsenindizes", layout="wide")
@@ -326,26 +329,47 @@ class WeitereAnwendung(Page):
             plot_line(zeiten, shanghai, "Shanghai Composite", "red")
 
 
-        # --------------------------------------
-        # Tabelle der letzten 20 Werte
-        # --------------------------------------
-        st.subheader("📋 Letzte Werte (max. 20)")
-        import pandas as pd
+class Impressum(Page):
+    def render(self):
+#Zeilenumbruch in MarkDown 2mal Leertaste am Zeilenende
+        st.title("🏠 Impressum")
+        st.write("""
+     
+            Angaben gemäß § 5 TMG:  
 
-        df = pd.DataFrame({
-            "Zeit": zeiten[-20:],
-            "DAX": dax[-20:],
-            "Dow Jones": dow[-20:],
-            "Shanghai": shanghai[-20:]
-        })
+            Michael Thomas  
+            In der Beek 87  
+            D-42113 Wuppertal  
 
-        st.dataframe(df)
+            E-Mail: mt.com@web.de  
 
-        # --------------------------------------
-        # Info
-        # --------------------------------------
-        st.info("🔄 Die Seite wird automatisch aktualisiert. Kein Neustart nötig.")
+            Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:
 
+            Michael Thomas  
+            In der Beek 87  
+            D-42113 Wuppertal    
+
+            Haftungsausschluss
+
+            Haftung für Inhalte
+            Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten  
+            nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8–10 TMG sind wir jedoch nicht verpflichtet,  
+            übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen,  
+            die auf eine rechtswidrige Tätigkeit hinweisen.
+
+            Haftung für Links  
+            Unsere Website enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben.  
+            Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der  
+            verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber verantwortlich.  
+
+            Urheberrecht
+
+            Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem  
+            deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet. Eine Vervielfältigung,  
+            Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts  
+            bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. 
+
+                    """)
 
 
 # ---------------------------------------------------
@@ -356,7 +380,8 @@ class PageFactory:
         "🏠 Startseite": Startseite,
         "📊 Bilanzanalyse": Bilanzanalyse,
         "🔗 Linkliste": Linkliste,
-        "🧩 Indizes": WeitereAnwendung
+        "🧩 Indizes": Indizes,
+        "🧩 Impressum": Impressum
     }
 
     @classmethod
@@ -373,7 +398,7 @@ class PageFactory:
 st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 #st.sidebar.title("📌 Navigation")
   #mit r werden die Slashes nicht interpretiert, oder \\
-#st.sidebar.image("LogoMT.png", width=120)
+st.sidebar.image("LogoMT.png", width=120)
 
 seiten = list(PageFactory._pages.keys())
 wahl = st.sidebar.radio("Seite auswählen:", seiten)
