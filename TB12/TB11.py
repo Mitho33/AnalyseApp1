@@ -50,10 +50,10 @@ class Startseite(Page):
         ### 🔗 Linkliste  
         Eine Sammlung nützlicher Links.
 
-        ### 🧩 Indizes  
+        ### 📈 Indizes  
         Übersicht ausgewählter Indizes.
         
-         ### 🧩 Impressum 
+         ### ⓘ Impressum 
         Impressum und Haftungsausschluss
         """)
 
@@ -332,7 +332,7 @@ class Indizes(Page):
 class Impressum(Page):
     def render(self):
 #Zeilenumbruch in MarkDown 2mal Leertaste am Zeilenende
-        st.title("🏠 Impressum")
+        st.title("ⓘ Impressum")
         st.write("""
      
             Angaben gemäß § 5 TMG:  
@@ -380,8 +380,8 @@ class PageFactory:
         "🏠 Startseite": Startseite,
         "📊 Bilanzanalyse": Bilanzanalyse,
         "🔗 Linkliste": Linkliste,
-        "🧩 Indizes": Indizes,
-        "🧩 Impressum": Impressum
+        "📈 Indizes": Indizes,
+        "ⓘ Impressum": Impressum
     }
 
     @classmethod
@@ -398,14 +398,11 @@ class PageFactory:
 st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 #st.sidebar.title("📌 Navigation")
   #mit r werden die Slashes nicht interpretiert, oder \\
-#st.sidebar.image("LogoMT.png", width=120)
+st.sidebar.image("LogoMT.png", width=120)
 
 seiten = list(PageFactory._pages.keys())
 wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
-
-
-
 
