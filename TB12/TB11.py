@@ -17,6 +17,16 @@ st.markdown("""
 button[data-testid="stSidebarCollapseButton"] {
     display: block !important;
 }
+
+
+# CSS: Hamburger größer machen
+st.markdown("""
+<style>
+/* Hamburger-Button anpassen */
+button[data-testid="stSidebarTrigger"] svg {
+    width: 40px !important;
+    height: 40px !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -453,6 +463,7 @@ st.markdown("""
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
