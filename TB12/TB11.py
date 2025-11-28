@@ -406,8 +406,31 @@ st.sidebar.image(
 seiten = list(PageFactory._pages.keys())
 wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
+st.markdown("""
+<style>
+   @media (max-width:800px) {
+   #GitHub Icon
+   header[data-testid="stHeaderActionMenu] svg{
+   width:28px !important;
+   height:28px !important;
+   }
+
+   #Hamburger Menü
+   header[data-testid="baseButton-Header"] svg {
+   width:32px !important;
+   height:32px !important;
+   }
+
+   #optional
+   header[data-testid="baseButton-Header"]  {
+       margin-left: 8px !important;
+   }
+}
+</style>
+""", unsafe_allow_html=True)
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
