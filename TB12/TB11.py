@@ -40,20 +40,6 @@ def berechne_kennzahlen(df):
 # ---------------------------------------------------
 class Startseite(Page):
     def render(self):
-        # Rotes Menü-Label links oben
-        st.markdown(
-            """
-            <style>
-            .menu-label {
-                color: red;
-                font-weight: bold;
-                font-size: 16px;
-            }
-            </style>
-            <div class="menu-label"><< Menü</div>
-            """,
-            unsafe_allow_html=True
-        )
 
         st.title("🏠 Willkommen zur Analyse-App")
         st.write("""
@@ -438,3 +424,4 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
