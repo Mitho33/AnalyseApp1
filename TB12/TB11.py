@@ -8,7 +8,7 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime
 import time
-
+from streamlit_autorefresh import st_autorefresh
 
 # ---------------------------------------------------
 # Page-Basis-Klasse
@@ -162,7 +162,7 @@ class Linkliste(Page):
 
 class Indizes(Page):
     def render(self):
-        st.title("🧩 Indizes")   
+        st.title("🧩 Live-Indizes: DAX, Dow Jones & Shanghai Composite")
         st.write("Automatische Aktualisierung alle 30 Sekunden")
 
         # -----------------------------
@@ -176,12 +176,19 @@ class Indizes(Page):
             st.session_state.dow = []
         if "shanghai" not in st.session_state:
             st.session_state.shanghai = []
-        if "last_update" not in st.session_state:
-            st.session_state.last_update = 0
+
+        # --------------------------------------
+        # Seite automatisch alle 30 Sekunden neu laden
+        # --------------------------------------
+        from streamlit_autorefresh import st_autorefresh
+        st_autorefresh(interval=30*1000, key="index_refresh")
 
         # --------------------------------------
         # Funktion zum Abrufen der Kursdaten
         # --------------------------------------
+        import yfinance as yf
+        from datetime import datetime
+
         def get_index_value(ticker):
             try:
                 return yf.Ticker(ticker).info.get("regularMarketPrice", None)
@@ -189,30 +196,22 @@ class Indizes(Page):
                 return None
 
         # --------------------------------------
-        # Live Daten aktualisieren (alle 30s)
+        # Neue Werte abrufen
         # --------------------------------------
-        now_ts = time.time()
-        needs_rerun = False
+        now = datetime.now().strftime("%H:%M:%S")
 
-        if now_ts - st.session_state.last_update > 30:   # alle 30 Sekunden
-            now = datetime.now().strftime("%H:%M:%S")
+        dax = get_index_value("^GDAXI")
+        dow = get_index_value("^DJI")
+        shanghai = get_index_value("000001.SS")
 
-            dax = get_index_value("^GDAXI")
-            dow = get_index_value("^DJI")
-            shanghai = get_index_value("000001.SS")
+        if dax and dow and shanghai:
+            st.session_state.zeiten.append(now)
+            st.session_state.dax.append(dax)
+            st.session_state.dow.append(dow)
+            st.session_state.shanghai.append(shanghai)
 
-            if dax and dow and shanghai:
-                st.session_state.zeiten.append(now)
-                st.session_state.dax.append(dax)
-                st.session_state.dow.append(dow)
-                st.session_state.shanghai.append(shanghai)
-                st.session_state.last_update = now_ts
-                needs_rerun = True  # merken, dass wir neuladen müssen
-
-        # --------------------------------------
-        # Streamlit Oberfläche
-        # --------------------------------------
-        zeiten = st.session_state.zeiten[-50:]  # nur letzte 50 Werte
+        # Nur die letzten 50 Werte behalten
+        zeiten = st.session_state.zeiten[-50:]
         dax = st.session_state.dax[-50:]
         dow = st.session_state.dow[-50:]
         shanghai = st.session_state.shanghai[-50:]
@@ -225,6 +224,8 @@ class Indizes(Page):
         # -----------------------------
         # Diagramme
         # -----------------------------
+        import matplotlib.pyplot as plt
+
         def plot_line(x, y, title, color):
             fig, ax = plt.subplots(figsize=(5, 3))
             ax.plot(x, y, marker="o", color=color)
@@ -237,18 +238,11 @@ class Indizes(Page):
 
         with col1:
             plot_line(zeiten, dax, "DAX", "blue")
-
         with col2:
             plot_line(zeiten, dow, "Dow Jones", "green")
-
         with col3:
             plot_line(zeiten, shanghai, "Shanghai Composite", "red")
 
-        # --------------------------------------
-        # Nur einmal neu laden, falls Update erfolgt
-        # --------------------------------------
-        if needs_rerun:
-            st.experimental_rerun()
 
 
 
@@ -313,6 +307,7 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
