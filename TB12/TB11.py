@@ -171,10 +171,102 @@ class Bilanzanalyse(Page):
         **Verschuldungsgrad (%)** = (LFK + KFK) / EK × 100  
         """)
 
-# ---------------------------------------------------
-# Weitere Seiten (Linkliste, Indizes, Impressum)
-# ---------------------------------------------------
-# ... hier kommen deine anderen Page-Klassen wie Linkliste, Indizes, Impressum unverändert ...
+class Linkliste(Page):
+    def render(self):
+        st.title("🔗 Nützliche Links")
+        links = {
+            "YoutubeKanal Michael Thomas": "https://m.youtube.com/channel/UC11vJSbmGWmNe0qJhtTu9hA",
+            "GitHub Michael Thomas":"https://github.com/Mitho33",
+            "Unternehmensregister": "https://www.unternehmensregister.de/de",
+            "Bundesanzeiger": "https://www.bundesanzeiger.de",
+            "Statistisches Bundesamt": "https://www.destatis.de",            
+            "Finanzlexikon": "https://www.finance-magazin.de"
+        }
+        for name, url in links.items():
+            st.markdown(f"🔹 **[{name}]({url})**")
+
+class Indizes(Page):
+    def render(self):
+        st.title("📈 Live-Indizes: DAX, Dow Jones & Shanghai")
+        st.write("Automatische Aktualisierung alle 30 Sekunden")
+
+        if "zeiten" not in st.session_state:
+            st.session_state.zeiten = []
+        if "dax" not in st.session_state:
+            st.session_state.dax = []
+        if "dow" not in st.session_state:
+            st.session_state.dow = []
+        if "shanghai" not in st.session_state:
+            st.session_state.shanghai = []
+        if "last_update" not in st.session_state:
+            st.session_state.last_update = 0
+
+        def get_index_value(ticker):
+            try:
+                return yf.Ticker(ticker).info.get("regularMarketPrice", None)
+            except:
+                return None
+
+        now_ts = time.time()
+        if now_ts - st.session_state.last_update > 30:
+            now = datetime.now().strftime("%H:%M:%S")
+            dax = get_index_value("^GDAXI")
+            dow = get_index_value("^DJI")
+            shanghai = get_index_value("000001.SS")
+            if dax and dow and shanghai:
+                st.session_state.zeiten.append(now)
+                st.session_state.dax.append(dax)
+                st.session_state.dow.append(dow)
+                st.session_state.shanghai.append(shanghai)
+            st.session_state.last_update = now_ts
+            st.rerun()
+
+        zeiten = st.session_state.zeiten[-50:]
+        dax = st.session_state.dax[-50:]
+        dow = st.session_state.dow[-50:]
+        shanghai = st.session_state.shanghai[-50:]
+
+        col1, col2, col3 = st.columns(3)
+
+        def plot_line(x, y, title, color):
+            fig, ax = plt.subplots(figsize=(5, 3))
+            ax.plot(x, y, marker="o", color=color)
+            ax.set_title(title)
+            ax.set_xlabel("Zeit")
+            ax.set_ylabel("Indexstand")
+            ax.grid(True)
+            plt.xticks(rotation=45)
+            st.pyplot(fig)
+
+        with col1:
+            plot_line(zeiten, dax, "DAX", "blue")
+        with col2:
+            plot_line(zeiten, dow, "Dow Jones", "green")
+        with col3:
+            plot_line(zeiten, shanghai, "Shanghai Composite", "red")
+
+class Impressum(Page):
+    def render(self):
+        st.title("ⓘ Impressum")
+        st.write("""
+        Angaben gemäß § 5 TMG:  
+
+        Michael Thomas  
+        In der Beek 87  
+        D-42113 Wuppertal  
+        E-Mail: mt.com@web.de  
+
+        Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:  
+        Michael Thomas  
+        In der Beek 87  
+        D-42113 Wuppertal    
+
+        Haftungsausschluss  
+        ...
+
+        Urheberrecht  
+        ...
+        """)
 
 # ---------------------------------------------------
 # Factory
@@ -183,10 +275,9 @@ class PageFactory:
     _pages = {
         "🏠 Startseite": Startseite,
         "📊 Bilanzanalyse": Bilanzanalyse,
-        # Füge hier die anderen Seiten ein, z.B.
-        # "🔗 Linkliste": Linkliste,
-        # "📈 Indizes": Indizes,
-        # "ⓘ Impressum": Impressum
+        "🔗 Linkliste": Linkliste,
+        "📈 Indizes": Indizes,
+        "ⓘ Impressum": Impressum
     }
 
     @classmethod
@@ -199,9 +290,7 @@ class PageFactory:
 # ---------------------------------------------------
 # Streamlit Hauptprogramm
 # ---------------------------------------------------
-# Logo im Sidebar
 st.sidebar.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/LogoMT.png", width=120)
-
 seiten = list(PageFactory._pages.keys())
 wahl = st.sidebar.radio("Seite auswählen:", seiten)
 seite_obj = PageFactory.create(wahl)
