@@ -403,8 +403,9 @@ st.markdown(
     <style>
     /* Hamburger Menü Icon links oben */
     [data-testid="collapsedControl"] {
-        color: red !important;
-        font-size: 28px !important;  /* Größe anpassen */
+        fill: red !important;
+        width: 28px !important;  /* Größe anpassen */
+        heigth:28px !important;
     }
     </style>
     """,
@@ -424,5 +425,6 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
