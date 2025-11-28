@@ -8,6 +8,7 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime
 import time
+from streamlit.experimental_rerun import st_autorefresh
 
 # ---------------------------------------------------
 # Page-Basis-Klasse
@@ -296,4 +297,5 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
