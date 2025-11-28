@@ -1,8 +1,4 @@
 import streamlit as st
-import streamlit as st
-
-st.set_page_config(page_title="Test", layout="wide", initial_sidebar_state="expanded")
-
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
@@ -399,39 +395,19 @@ class PageFactory:
 # ---------------------------------------------------
 # Streamlit Hauptprogramm
 # ---------------------------------------------------
-
+st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 #st.sidebar.title("📌 Navigation")
   #mit r werden die Slashes nicht interpretiert, oder \\
-#st.sidebar.image("LogoMT.png", width=120)
-st.sidebar.image(
-    "https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/LogoMT.png",
-    width=120
-)
+st.sidebar.image("LogoMT.png", width=120)
+
+#st.sidebar.image(
+#    "https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/LogoMT.png",
+#    width=120
+#)
+
 seiten = list(PageFactory._pages.keys())
 wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
