@@ -1,4 +1,5 @@
 import streamlit as st
+st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
@@ -395,7 +396,7 @@ class PageFactory:
 # ---------------------------------------------------
 # Streamlit Hauptprogramm
 # ---------------------------------------------------
-st.set_page_config(page_title="Bilanzanalyse", layout="wide")
+#st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 #st.sidebar.title("📌 Navigation")
   #mit r werden die Slashes nicht interpretiert, oder \\
 #st.sidebar.image("LogoMT.png", width=120)
@@ -428,6 +429,7 @@ st.markdown("""
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
