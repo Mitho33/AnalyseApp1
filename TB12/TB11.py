@@ -411,30 +411,25 @@ st.markdown("""
 
 @media (max-width: 800px) {
 
-    /* Hamburger-Icon vergrößern */
+    /* Hamburger-Icon größer machen */
     button[data-testid="collapsedControl"] svg {
-        width: 32px !important;
-        height: 32px !important;
+        width: 34px !important;
+        height: 34px !important;
     }
 
-    /* Menü-Text neben dem Icon einfügen */
-    /* Trick: Wir fügen ein pseudo-element in den HEADER ein */
-    header:after {
-        content: "   Menü";
-        font-size: 20px;
-        font-weight: 600;
-        color: white;
-        display: inline-block;
-        margin-left: 10px;
-        vertical-align: middle;
+    /* Optional: etwas Abstand einfügen */
+    button[data-testid="collapsedControl"] {
+        padding: 6px !important;
     }
 }
 
 </style>
 """, unsafe_allow_html=True)
 
+
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
