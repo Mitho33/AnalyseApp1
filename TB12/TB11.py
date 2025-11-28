@@ -396,6 +396,17 @@ class PageFactory:
 # Streamlit Hauptprogramm
 # ---------------------------------------------------
 st.set_page_config(page_title="Bilanzanalyse", layout="wide")
+# Hamburger-Button größer und rot
+st.markdown("""
+<style>
+/* Hamburger-Button */
+button[data-testid="stSidebarTrigger"] svg {
+    width: 40px !important;      /* Breite */
+    height: 40px !important;     /* Höhe */
+    fill: red !important;        /* Farbe */
+}
+</style>
+""", unsafe_allow_html=True)
 #st.sidebar.title("📌 Navigation")
   #mit r werden die Slashes nicht interpretiert, oder \\
 #st.sidebar.image("LogoMT.png", width=120)
@@ -410,5 +421,6 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
