@@ -240,7 +240,7 @@ class Linkliste(Page):
 class Indizes(Page):
     def render(self):
         st.title("🧩 Indizes")   
-        st.set_page_config(page_title="Live Börsenindizes", layout="wide")
+        #st.set_page_config(page_title="Live Börsenindizes", layout="wide")
 
         # -----------------------------
         # Session State initialisieren
@@ -424,4 +424,5 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
