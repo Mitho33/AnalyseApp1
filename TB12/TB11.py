@@ -401,16 +401,17 @@ st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 st.markdown(
     """
     <style>
-    /* Hamburger Menü Icon links oben */
-        [data-testid="stSidebarCollapsedControl"] svg {
-        fill: red !important;
-        width: 28px !important;  /* Größe anpassen */
-        heigth:28px !important;
+    /* Hamburger-Menü oben links */
+    [data-testid="stSidebarCollapsedControl"] svg {
+        fill: red !important;      /* Farbe des SVG ändern */
+        width: 32px !important;    /* Breite */
+        height: 32px !important;   /* Höhe */
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 # Sidebar-Logo
 st.sidebar.image(
@@ -425,6 +426,7 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
