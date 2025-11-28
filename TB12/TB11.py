@@ -3,33 +3,6 @@ import streamlit as st
 
 st.set_page_config(page_title="Test", layout="wide", initial_sidebar_state="collapsed")
 
-# Inhalt Sidebar
-st.sidebar.title("Menü")
-st.sidebar.write("Inhalt der Sidebar")
-
-# Inhalt Hauptbereich
-st.write("Hauptinhalt")
-
-# CSS: Hamburger immer sichtbar
-st.markdown("""
-<style>
-/* Hamburger sichtbar machen, auch bei breitem Bildschirm */
-button[data-testid="stSidebarCollapseButton"] {
-    display: block !important;
-}
-
-
-# CSS: Hamburger größer machen
-st.markdown("""
-<style>
-/* Hamburger-Button anpassen */
-button[data-testid="stSidebarTrigger"] svg {
-    width: 40px !important;
-    height: 40px !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
 
 
 import pandas as pd
@@ -463,6 +436,7 @@ st.markdown("""
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
