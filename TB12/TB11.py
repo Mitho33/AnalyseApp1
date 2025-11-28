@@ -192,6 +192,8 @@ class Indizes(Page):
         # Live Daten aktualisieren (alle 30s)
         # --------------------------------------
         now_ts = time.time()
+        needs_rerun = False
+
         if now_ts - st.session_state.last_update > 30:   # alle 30 Sekunden
             now = datetime.now().strftime("%H:%M:%S")
 
@@ -204,9 +206,8 @@ class Indizes(Page):
                 st.session_state.dax.append(dax)
                 st.session_state.dow.append(dow)
                 st.session_state.shanghai.append(shanghai)
-
-            st.session_state.last_update = now_ts
-            st.experimental_rerun()  # Seite neuladen
+                st.session_state.last_update = now_ts
+                needs_rerun = True  # merken, dass wir neuladen müssen
 
         # --------------------------------------
         # Streamlit Oberfläche
@@ -242,6 +243,13 @@ class Indizes(Page):
 
         with col3:
             plot_line(zeiten, shanghai, "Shanghai Composite", "red")
+
+        # --------------------------------------
+        # Nur einmal neu laden, falls Update erfolgt
+        # --------------------------------------
+        if needs_rerun:
+            st.experimental_rerun()
+
 
 
 class Impressum(Page):
@@ -305,6 +313,7 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
