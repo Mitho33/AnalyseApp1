@@ -401,11 +401,10 @@ st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 st.markdown(
     """
     <style>
-    /* Hamburger-Menü oben links */
-    [data-testid="stSidebarCollapsedControl"] svg {
-        fill: red !important;      /* Farbe des SVG ändern */
-        width: 32px !important;    /* Breite */
-        height: 32px !important;   /* Höhe */
+    /* Material-Icon für Sidebar Collapse */
+    [data-testid="stIconMaterial"] {
+        color: red !important;   /* Textfarbe des Icons */
+        font-size: 32px !important; /* Größe */
     }
     </style>
     """,
@@ -426,6 +425,7 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
