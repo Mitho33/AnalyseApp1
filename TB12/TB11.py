@@ -410,35 +410,31 @@ class PageFactory:
 # Streamlit Hauptprogramm
 # ---------------------------------------------------
 st.set_page_config(page_title="Bilanzanalyse", layout="wide")
-import streamlit as st
 
-# CSS einfügen, um Hamburger-Menü rot zu färben
+# CSS einfügen, um Hamburger-Menü rot und größer zu färben
 st.markdown(
     """
     <style>
-    /* Hamburger Menü Icon */
+    /* Hamburger Menü Icon links oben */
     [data-testid="collapsedControl"] {
         color: red !important;
+        font-size: 28px !important;  /* Größe anpassen */
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-#st.sidebar.title("📌 Navigation")
-  #mit r werden die Slashes nicht interpretiert, oder \\
-#st.sidebar.image("LogoMT.png", width=120)
-
+# Sidebar-Logo
 st.sidebar.image(
-     "https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/LogoMT.png",
-     width=120
- )
+    "https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/LogoMT.png",
+    width=120
+)
 
+# Sidebar-Auswahl der Seiten
 seiten = list(PageFactory._pages.keys())
 wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
+# Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
-
-
-
