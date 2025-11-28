@@ -8,7 +8,7 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime
 import time
-from streamlit_autorefresh import st_autorefresh
+
 
 # ---------------------------------------------------
 # Page-Basis-Klasse
@@ -160,89 +160,41 @@ class Linkliste(Page):
         for name, url in links.items():
             st.markdown(f"🔹 **[{name}]({url})**")
 
-class Indizes(Page):
-    def render(self):
-        st.title("🧩 Live-Indizes: DAX, Dow Jones & Shanghai Composite")
-        st.write("Automatische Aktualisierung alle 30 Sekunden")
+import time
+import streamlit as st
+from datetime import datetime
+import yfinance as yf
+import matplotlib.pyplot as plt
 
-        # -----------------------------
-        # Session State initialisieren
-        # -----------------------------
-        if "zeiten" not in st.session_state:
-            st.session_state.zeiten = []
-        if "dax" not in st.session_state:
-            st.session_state.dax = []
-        if "dow" not in st.session_state:
-            st.session_state.dow = []
-        if "shanghai" not in st.session_state:
-            st.session_state.shanghai = []
+# Session State initialisieren
+if "zeiten" not in st.session_state:
+    st.session_state.zeiten = []
+if "dax" not in st.session_state:
+    st.session_state.dax = []
+if "dow" not in st.session_state:
+    st.session_state.dow = []
+if "shanghai" not in st.session_state:
+    st.session_state.shanghai = []
 
-        # --------------------------------------
-        # Seite automatisch alle 30 Sekunden neu laden
-        # --------------------------------------
-        from streamlit_autorefresh import st_autorefresh
-        st_autorefresh(interval=30*1000, key="index_refresh")
+# Werte abrufen
+now = datetime.now().strftime("%H:%M:%S")
+dax = yf.Ticker("^GDAXI").info.get("regularMarketPrice", None)
+dow = yf.Ticker("^DJI").info.get("regularMarketPrice", None)
+shanghai = yf.Ticker("000001.SS").info.get("regularMarketPrice", None)
 
-        # --------------------------------------
-        # Funktion zum Abrufen der Kursdaten
-        # --------------------------------------
-        import yfinance as yf
-        from datetime import datetime
+if dax and dow and shanghai:
+    st.session_state.zeiten.append(now)
+    st.session_state.dax.append(dax)
+    st.session_state.dow.append(dow)
+    st.session_state.shanghai.append(shanghai)
 
-        def get_index_value(ticker):
-            try:
-                return yf.Ticker(ticker).info.get("regularMarketPrice", None)
-            except:
-                return None
+# nur die letzten 50 Werte behalten
+zeiten = st.session_state.zeiten[-50:]
+dax = st.session_state.dax[-50:]
+dow = st.session_state.dow[-50:]
+shanghai = st.session_state.shanghai[-50:]
 
-        # --------------------------------------
-        # Neue Werte abrufen
-        # --------------------------------------
-        now = datetime.now().strftime("%H:%M:%S")
-
-        dax = get_index_value("^GDAXI")
-        dow = get_index_value("^DJI")
-        shanghai = get_index_value("000001.SS")
-
-        if dax and dow and shanghai:
-            st.session_state.zeiten.append(now)
-            st.session_state.dax.append(dax)
-            st.session_state.dow.append(dow)
-            st.session_state.shanghai.append(shanghai)
-
-        # Nur die letzten 50 Werte behalten
-        zeiten = st.session_state.zeiten[-50:]
-        dax = st.session_state.dax[-50:]
-        dow = st.session_state.dow[-50:]
-        shanghai = st.session_state.shanghai[-50:]
-
-        # -----------------------------
-        # Layout: 1 Zeile, 3 Spalten
-        # -----------------------------
-        col1, col2, col3 = st.columns(3)
-
-        # -----------------------------
-        # Diagramme
-        # -----------------------------
-        import matplotlib.pyplot as plt
-
-        def plot_line(x, y, title, color):
-            fig, ax = plt.subplots(figsize=(5, 3))
-            ax.plot(x, y, marker="o", color=color)
-            ax.set_title(title)
-            ax.set_xlabel("Zeit")
-            ax.set_ylabel("Indexstand")
-            ax.grid(True)
-            plt.xticks(rotation=45)
-            st.pyplot(fig)
-
-        with col1:
-            plot_line(zeiten, dax, "DAX", "blue")
-        with col2:
-            plot_line(zeiten, dow, "Dow Jones", "green")
-        with col3:
-            plot_line(zeiten, shanghai, "Shanghai Composite", "red")
-
+# Diagramme wie bisher
 
 
 
@@ -307,6 +259,7 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
