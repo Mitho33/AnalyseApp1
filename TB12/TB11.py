@@ -1,9 +1,7 @@
 import streamlit as st
 import streamlit as st
 
-st.set_page_config(page_title="Test", layout="wide", initial_sidebar_state="collapsed")
-
-
+st.set_page_config(page_title="Test", layout="wide", initial_sidebar_state="expanded")
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -246,7 +244,7 @@ class Linkliste(Page):
 class Indizes(Page):
     def render(self):
         st.title("🧩 Indizes")   
-        #st.set_page_config(page_title="Live Börsenindizes", layout="wide")
+        st.set_page_config(page_title="Live Börsenindizes", layout="wide")
 
         # -----------------------------
         # Session State initialisieren
@@ -412,30 +410,9 @@ st.sidebar.image(
 seiten = list(PageFactory._pages.keys())
 wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
-st.markdown("""
-<style>
-
-@media (max-width: 800px) {
-
-    /* Hamburger-Icon vergrößern */
-    button[data-testid="stSidebarTrigger"] svg {
-        width: 40px !important;
-        height: 40px !important;
-    }
-
-    /* Button selbst etwas größer machen */
-    button[data-testid="stSidebarTrigger"] {
-        padding: 10px !important;
-    }
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-
-
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
