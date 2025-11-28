@@ -426,9 +426,22 @@ st.markdown("""
 
 </style>
 """, unsafe_allow_html=True)
+st.markdown("""
+<script>
+setTimeout(() => {
+    const btn = document.querySelector("button");
+    if (btn) {
+        alert("Button TestID: " + btn.getAttribute("data-testid"));
+    } else {
+        alert("Kein Button gefunden");
+    }
+}, 1500);
+</script>
+""", unsafe_allow_html=True)
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
