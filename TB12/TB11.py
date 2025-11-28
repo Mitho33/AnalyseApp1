@@ -1,5 +1,5 @@
 import streamlit as st
-st.set_page_config(page_title="Bilanzanalyse", layout="wide")
+st.set_page_config(page_title="Bilanzanalyse", layout="wide", initial_sidebar_state="collapsed")
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
@@ -426,43 +426,12 @@ st.markdown("""
 
 </style>
 """, unsafe_allow_html=True)
-st.markdown("""
-<style>
 
-@media (max-width: 800px) {
-
-    /* Test 1 */
-    button[data-testid="stSidebarTrigger"] {
-        background: red !important;
-    }
-
-    /* Test 2 */
-    button[data-testid="collapsedControl"] {
-        background: red !important;
-    }
-
-    /* Test 3 */
-    button[data-testid="navButton"] {
-        background: red !important;
-    }
-
-    /* Test 4 */
-    button[data-testid="mobileMenuButton"] {
-        background: red !important;
-    }
-
-    /* Test 5 – falls Streamlit ein div benutzt */
-    div[data-testid="stSidebarTrigger"] {
-        background: red !important;
-    }
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
