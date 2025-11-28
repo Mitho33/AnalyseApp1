@@ -411,24 +411,24 @@ st.markdown("""
 
 @media (max-width: 800px) {
 
-    /* Hamburger-Icon größer machen */
-    button[data-testid="collapsedControl"] svg {
-        width: 34px !important;
-        height: 34px !important;
+    /* Hamburger-Icon vergrößern */
+    button[data-testid="stSidebarTrigger"] svg {
+        width: 40px !important;
+        height: 40px !important;
     }
 
-    /* Optional: etwas Abstand einfügen */
-    button[data-testid="collapsedControl"] {
-        padding: 6px !important;
+    /* Button selbst etwas größer machen */
+    button[data-testid="stSidebarTrigger"] {
+        padding: 10px !important;
     }
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
