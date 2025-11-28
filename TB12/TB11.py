@@ -241,7 +241,7 @@ class Linkliste(Page):
 class Indizes(Page):
     def render(self):
         st.title("🧩 Indizes")   
-        st.set_page_config(page_title="Live Börsenindizes", layout="wide")
+        #st.set_page_config(page_title="Live Börsenindizes", layout="wide")
 
         # -----------------------------
         # Session State initialisieren
@@ -396,7 +396,7 @@ class PageFactory:
 # ---------------------------------------------------
 # Streamlit Hauptprogramm
 # ---------------------------------------------------
-#st.set_page_config(page_title="Bilanzanalyse", layout="wide")
+
 #st.sidebar.title("📌 Navigation")
   #mit r werden die Slashes nicht interpretiert, oder \\
 #st.sidebar.image("LogoMT.png", width=120)
@@ -431,6 +431,7 @@ st.markdown("""
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
