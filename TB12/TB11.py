@@ -408,28 +408,37 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 
 st.markdown("""
 <style>
-   @media (max-width:800px) {
-   #GitHub Icon
-   header[data-testid="stHeaderActionMenu] svg{
-   width:28px !important;
-   height:28px !important;
-   }
 
-   #Hamburger Menü
-   header[data-testid="baseButton-Header"] svg {
-   width:32px !important;
-   height:32px !important;
-   }
+@media (max-width: 800px) {
 
-   #optional
-   header[data-testid="baseButton-Header"]  {
-       margin-left: 8px !important;
-   }
+    /* Icon größer machen */
+    button[data-testid="collapsedControl"] svg {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    /* Container breiter machen, damit Text reinpasst */
+    button[data-testid="collapsedControl"] {
+        width: auto !important;
+        padding-right: 10px !important;
+    }
+
+    /* Text "Menü" anzeigen */
+    button[data-testid="collapsedControl"]::after {
+        content: "  Menü";
+        font-size: 18px;
+        font-weight: 600;
+        color: white;
+        margin-left: 6px;
+    }
 }
+
 </style>
 """, unsafe_allow_html=True)
+
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
