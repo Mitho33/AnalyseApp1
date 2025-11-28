@@ -1,5 +1,27 @@
 import streamlit as st
-st.set_page_config(page_title="Test", layout="wide", initial_sidebar_state="expanded")
+import streamlit as st
+
+st.set_page_config(page_title="Test", layout="wide", initial_sidebar_state="collapsed")
+
+# Inhalt Sidebar
+st.sidebar.title("Menü")
+st.sidebar.write("Inhalt der Sidebar")
+
+# Inhalt Hauptbereich
+st.write("Hauptinhalt")
+
+# CSS: Hamburger immer sichtbar
+st.markdown("""
+<style>
+/* Hamburger sichtbar machen, auch bei breitem Bildschirm */
+button[data-testid="stSidebarCollapseButton"] {
+    display: block !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
@@ -431,6 +453,7 @@ st.markdown("""
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
