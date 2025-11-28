@@ -404,7 +404,7 @@ st.markdown(
     /* Material-Icon für Sidebar Collapse */
     [data-testid="stIconMaterial"] {
         color: red !important;   /* Textfarbe des Icons */
-        font-size: 32px !important; /* Größe */
+        font-size: 40 px !important; /* Größe */
     }
     </style>
     """,
@@ -425,6 +425,7 @@ wahl = st.sidebar.radio("Seite auswählen:", seiten)
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
