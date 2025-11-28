@@ -427,20 +427,43 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 st.markdown("""
-<script>
-setTimeout(() => {
-    const btn = document.querySelector("button");
-    if (btn) {
-        alert("Button TestID: " + btn.getAttribute("data-testid"));
-    } else {
-        alert("Kein Button gefunden");
+<style>
+
+@media (max-width: 800px) {
+
+    /* Test 1 */
+    button[data-testid="stSidebarTrigger"] {
+        background: red !important;
     }
-}, 1500);
-</script>
+
+    /* Test 2 */
+    button[data-testid="collapsedControl"] {
+        background: red !important;
+    }
+
+    /* Test 3 */
+    button[data-testid="navButton"] {
+        background: red !important;
+    }
+
+    /* Test 4 */
+    button[data-testid="mobileMenuButton"] {
+        background: red !important;
+    }
+
+    /* Test 5 – falls Streamlit ein div benutzt */
+    div[data-testid="stSidebarTrigger"] {
+        background: red !important;
+    }
+}
+
+</style>
 """, unsafe_allow_html=True)
+
 
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
