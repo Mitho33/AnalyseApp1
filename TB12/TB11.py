@@ -634,7 +634,7 @@ class Impressum(Page):
                     """)
 
     def render_right(self):
-        st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/TOM26.png", width = 350)
+        st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/TOM26.png", width = 250)
 
 
 # ---------------------------------------------------
@@ -704,6 +704,7 @@ st.session_state.seite = wahl
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
