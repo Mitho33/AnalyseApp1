@@ -134,7 +134,7 @@ class Startseite(Page):
                 st.rerun()
                 
         def render_right(self):
-            st.image("BildMural1.png", caption="Mural Wuppertal", width ="stretch")
+            st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/BildMural1.png", caption="Mural Wuppertal", width ="stretch")
 
 # ---------------------------------------------------
 # Bilanzanalyse
@@ -484,7 +484,7 @@ class Linkliste(Page):
         for name, url in links.items():
             st.markdown(f"🔹 **[{name}]({url})**")
     def render_right(self):
-        st.image("Kunst1.jpg", width ="stretch")
+        st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/Kunst1.jpg", width ="stretch")
 
 
 
@@ -634,7 +634,7 @@ class Impressum(Page):
                     """)
 
     def render_right(self):
-        st.image("TOM26.png", width ="stretch")
+        st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/TOM26.png", width ="stretch")
 
 
 # ---------------------------------------------------
@@ -704,6 +704,7 @@ st.session_state.seite = wahl
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
