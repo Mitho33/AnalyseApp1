@@ -13,9 +13,56 @@ import time
 # Basis Page-Klasse (abstrakt)
 # ---------------------------------------------------
 class Page(ABC):
+   @abstractmethod
+   def render(self):
+       pass
+
+#class Page(ABC):
+#    def render(self):
+##        self.render_header()
+ #       self.render_body()
+ #       self.render_footer()
+
+#    def render_header(self):
+#        pass
+
+#    @abstractmethod
+ #   def render_body(self):
+#        pass
+
+ #   def render_footer(self):
+ #       pass
+
+
+class LayoutStrategy(ABC):
     @abstractmethod
-    def render(self):
+    def render(self, page):
         pass
+
+#----------------------------------------------------
+#Konkrete Strategien
+#----------------------------------------------------
+
+class OneColumnLayout(LayoutStrategy):
+    def render(self, page):
+        st.container()
+        page.render_body()
+
+class TwoColumnLayout(LayoutStrategy):
+    def render(self, page):
+        col1, col2 = st.columns(2)
+
+        with col1:
+            if hasattr(page, "render_left"):
+                page.render_left()
+            else:
+                st.error("render_left() fehlt")
+
+        with col2:
+            if hasattr(page, "render_right"):
+                page.render_right()
+            else:
+                st.error("render_right() fehlt")
 
 
 # ---------------------------------------------------
@@ -39,54 +86,64 @@ def berechne_kennzahlen(df):
 # Startseite
 # ---------------------------------------------------
 class Startseite(Page):
-    def render(self):
+        def render(self):
+        
+            TwoColumnLayout().render(self) 
+      
+        
+        def render_left(self):
+            
+            st.title("🏠 Willkommen zur Analyse-App")
 
-        st.title("🏠 Willkommen zur Analyse-App")
+            st.header("Überblick")
+            st.write(
+                "Diese Anwendung unterstützt die betriebswirtschaftliche Analyse, "
+                "die Erstellung von Ergebnisrechnungen sowie die Marktbeobachtung."
+            )
 
-        st.header("Überblick")
-        st.write(
-            "Diese Anwendung unterstützt die betriebswirtschaftliche Analyse, "
-            "die Erstellung von Ergebnisrechnungen sowie die Marktbeobachtung."
-        )
+            st.header("Module")
 
-        st.header("Module")
+            st.subheader("📊 Bilanzanalyse")
+            st.write("Bilanzwerte für zwei Jahre, Kennzahlenberechnung und Export als PDF.")
+            if st.button("Zur Bilanzanalyse"):
+                st.session_state.seite = "📊 Bilanzanalyse"
+                st.rerun()
 
-        st.subheader("📊 Bilanzanalyse")
-        st.write("Bilanzwerte für zwei Jahre, Kennzahlenberechnung und Export als PDF.")
-        if st.button("Zur Bilanzanalyse"):
-            st.session_state.seite = "📊 Bilanzanalyse"
-            st.rerun()
+            st.subheader("📑 Ergebnisrechnung")
+            st.write("Erstellung der Abgrenzung sowie RKI-, RKII- und Betriebsergebnisrechnung.")
+            if st.button("Zur Ergebnisrechnung"):
+                st.session_state.seite = "📑 Ergebnisrechnung"
+                st.rerun()
 
-        st.subheader("📑 Ergebnisrechnung")
-        st.write("Erstellung der Abgrenzung sowie RKI-, RKII- und Betriebsergebnisrechnung.")
-        if st.button("Zur Ergebnisrechnung"):
-            st.session_state.seite = "📑 Ergebnisrechnung"
-            st.rerun()
+            st.subheader("🔗 Linkliste")
+            st.write("Sammlung nützlicher externer Fachquellen.")
+            if st.button("Zur Linkliste"):
+                st.session_state.seite = "🔗 Linkliste"
+                st.rerun()
 
-        st.subheader("🔗 Linkliste")
-        st.write("Sammlung nützlicher externer Fachquellen.")
-        if st.button("Zur Linkliste"):
-            st.session_state.seite = "🔗 Linkliste"
-            st.rerun()
+            st.subheader("📈 Indizes")
+            st.write("Live-Übersicht ausgewählter Börsenindizes.")
+            if st.button("Zu den Indizes"):
+                st.session_state.seite = "📈 Indizes"
+                st.rerun()
 
-        st.subheader("📈 Indizes")
-        st.write("Live-Übersicht ausgewählter Börsenindizes.")
-        if st.button("Zu den Indizes"):
-            st.session_state.seite = "📈 Indizes"
-            st.rerun()
-
-        st.subheader("ⓘ Impressum")
-        st.write("Impressum und rechtliche Hinweise.")
-        if st.button("Zum Impressum"):
-            st.session_state.seite = "ⓘ Impressum"
-            st.rerun()
-
+            st.subheader("ⓘ Impressum")
+            st.write("Impressum und rechtliche Hinweise.")
+            if st.button("Zum Impressum"):
+                st.session_state.seite = "ⓘ Impressum"
+                st.rerun()
+                
+        def render_right(self):
+            st.image("BildMural1.png", caption="Mural Wuppertal", width ="stretch")
 
 # ---------------------------------------------------
 # Bilanzanalyse
 # ---------------------------------------------------
 class Bilanzanalyse(Page):
     def render(self):
+        OneColumnLayout().render(self)
+    
+    def render_body(self):
         st.title("📊 Bilanzanalyse für 2 Jahre")
         st.header("📥 Eingabe der Bilanzwerte")
 
@@ -243,6 +300,9 @@ class Bilanzanalyse(Page):
 # ---------------------------------------------------
 class Ergebnisrechnung(Page):
     def render(self):
+        OneColumnLayout().render(self)
+    
+    def render_body(self):
         st.title("📑 Ergebnisrechnung (RKI / RKII / Betriebsergebnis)")
 
         # -----------------------------------
@@ -405,6 +465,11 @@ class Ergebnisrechnung(Page):
 # ---------------------------------------------------
 class Linkliste(Page):
     def render(self):
+        
+        TwoColumnLayout().render(self) 
+      
+        
+    def render_left(self):
         st.title("🔗 Nützliche Links")
 
         links = {
@@ -418,13 +483,20 @@ class Linkliste(Page):
 
         for name, url in links.items():
             st.markdown(f"🔹 **[{name}]({url})**")
+    def render_right(self):
+        st.image("Kunst1.jpg", width ="stretch")
+
 
 
 # ---------------------------------------------------
 # Weitere Anwendung
 # ---------------------------------------------------
 class Indizes(Page):
+    
     def render(self):
+        OneColumnLayout().render(self)
+    
+    def render_body(self):
         st.title("🧩 Indizes")   
         #st.set_page_config(page_title="Live Börsenindizes", layout="wide")
 
@@ -516,7 +588,11 @@ class Indizes(Page):
 
 
 class Impressum(Page):
-    def render(self):
+    def render(self):       
+        TwoColumnLayout().render(self) 
+      
+        
+    def render_left(self):     
 #Zeilenumbruch in MarkDown 2mal Leertaste am Zeilenende
         st.title("ⓘ Impressum")
         st.write("""
@@ -556,6 +632,9 @@ class Impressum(Page):
             bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. 
 
                     """)
+
+    def render_right(self):
+        st.image("TOM26.png", width ="stretch")
 
 
 # ---------------------------------------------------
