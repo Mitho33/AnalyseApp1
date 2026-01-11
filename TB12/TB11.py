@@ -494,9 +494,6 @@ class Linkliste(Page):
 # Weitere Anwendung
 # ---------------------------------------------------
 class Indizes(Page):
-    
-    def __init__(self, page=None):
-        self.page = page
 
     def render(self):
         OneColumnLayout().renderLayout(self)
@@ -684,6 +681,7 @@ st.session_state.seite = wahl
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
