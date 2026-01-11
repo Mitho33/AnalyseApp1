@@ -493,78 +493,55 @@ class Linkliste(Page):
 # ---------------------------------------------------
 class Indizes(Page):
     
+    def __init__(self, page=None):
+        self.page = page
+
     def render(self):
-        OneColumnLayout().render(self)
-    
+        OneColumnLayout().renderLayout(self)
+
     def render_body(self):
-        st.title("🧩 Indizes")   
-        #st.set_page_config(page_title="Live Börsenindizes", layout="wide")
-
-        # -----------------------------
-        # Session State initialisieren
-        # -----------------------------
-        if "zeiten" not in st.session_state:
-            st.session_state.zeiten = []
-        if "dax" not in st.session_state:
-            st.session_state.dax = []
-        if "dow" not in st.session_state:
-            st.session_state.dow = []
-        if "shanghai" not in st.session_state:
-            st.session_state.shanghai = []
-        if "last_update" not in st.session_state:
-            st.session_state.last_update = 0
-
-
-        # --------------------------------------
-        # Funktion zum Abrufen der Kursdaten
-        # --------------------------------------
-        def get_index_value(ticker):
-            try:
-                return yf.Ticker(ticker).info.get("regularMarketPrice", None)
-            except:
-                return None
-
-
-        # --------------------------------------
-        # Live Daten aktualisieren (alle 30s)
-        # --------------------------------------
-        now_ts = time.time()
-        if now_ts - st.session_state.last_update > 30:   # alle 30 Sekunden
-            now = datetime.now().strftime("%H:%M:%S")
-
-            dax = get_index_value("^GDAXI")
-            dow = get_index_value("^DJI")
-            shanghai = get_index_value("000001.SS")
-
-            if dax and dow and shanghai:
-                st.session_state.zeiten.append(now)
-                st.session_state.dax.append(dax)
-                st.session_state.dow.append(dow)
-                st.session_state.shanghai.append(shanghai)
-
-            st.session_state.last_update = now_ts
-            st.rerun()
-
-
-
-        # --------------------------------------
-        # Streamlit Oberfläche
-        # --------------------------------------
         st.title("📈 Live-Indizes: DAX, Dow Jones & Shanghai Composite")
         st.write("Automatische Aktualisierung alle 30 Sekunden")
 
-        zeiten = st.session_state.zeiten[-50:]  # nur letzte 50 Werte
-        dax = st.session_state.dax[-50:]
-        dow = st.session_state.dow[-50:]
-        shanghai = st.session_state.shanghai[-50:]
+        # Autorefresh alle 30 Sekunden
+        st_autorefresh(interval=30*1000, key="refresh")
 
         # -----------------------------
-        # Layout: 1 Zeile, 3 Spalten
+        # Session-State initialisieren
         # -----------------------------
-        col1, col2, col3 = st.columns(3)
+        for key in ["zeiten", "dax", "dow", "shanghai"]:
+            if key not in st.session_state:
+                st.session_state[key] = []
 
         # -----------------------------
-        # Diagramme
+        # Funktion zum Abrufen der Indexwerte
+        # -----------------------------
+        def get_index_value(ticker):
+            try:
+                return yf.Ticker(ticker).info.get("regularMarketPrice")
+            except:
+                return None
+
+        # -----------------------------
+        # Daten updaten
+        # -----------------------------
+        now = datetime.now().strftime("%H:%M:%S")
+        dax = get_index_value("^GDAXI")
+        dow = get_index_value("^DJI")
+        shanghai = get_index_value("000001.SS")
+
+        if all(val is not None for val in [dax, dow, shanghai]):
+            st.session_state.zeiten.append(now)
+            st.session_state.dax.append(dax)
+            st.session_state.dow.append(dow)
+            st.session_state.shanghai.append(shanghai)
+
+            # Nur letzte 50 Werte behalten
+            for key in ["zeiten", "dax", "dow", "shanghai"]:
+                st.session_state[key] = st.session_state[key][-50:]
+
+        # -----------------------------
+        # Diagramm-Funktion
         # -----------------------------
         def plot_line(x, y, title, color):
             fig, ax = plt.subplots(figsize=(5, 3))
@@ -576,15 +553,18 @@ class Indizes(Page):
             plt.xticks(rotation=45)
             st.pyplot(fig)
 
-
+        # -----------------------------
+        # Diagramme in 3 Spalten
+        # -----------------------------
+        col1, col2, col3 = st.columns(3)
         with col1:
-            plot_line(zeiten, dax, "DAX", "blue")
-
+            plot_line(st.session_state.zeiten, st.session_state.dax, "DAX", "blue")
         with col2:
-            plot_line(zeiten, dow, "Dow Jones", "green")
-
+            plot_line(st.session_state.zeiten, st.session_state.dow, "Dow Jones", "green")
         with col3:
-            plot_line(zeiten, shanghai, "Shanghai Composite", "red")
+            plot_line(st.session_state.zeiten, st.session_state.shanghai, "Shanghai Composite", "red")
+
+
 
 
 class Impressum(Page):
@@ -704,6 +684,7 @@ st.session_state.seite = wahl
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
