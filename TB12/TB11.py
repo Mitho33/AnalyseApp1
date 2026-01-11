@@ -496,7 +496,7 @@ class Linkliste(Page):
 class Indizes(Page):
 
     def render(self):
-        OneColumnLayout().renderLayout(self)
+        OneColumnLayout().render(self)
 
     def render_body(self):
         st.title("📈 Live-Indizes: DAX, Dow Jones & Shanghai Composite")
@@ -681,6 +681,7 @@ st.session_state.seite = wahl
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
