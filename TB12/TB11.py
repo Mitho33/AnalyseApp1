@@ -8,6 +8,8 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime
 import time
+from streamlit_autorefresh import st_autorefresh
+#hierfür pip install streamlit-autorefresh
 
 # ---------------------------------------------------
 # Basis Page-Klasse (abstrakt)
@@ -565,8 +567,6 @@ class Indizes(Page):
             plot_line(st.session_state.zeiten, st.session_state.shanghai, "Shanghai Composite", "red")
 
 
-
-
 class Impressum(Page):
     def render(self):       
         TwoColumnLayout().render(self) 
@@ -684,6 +684,7 @@ st.session_state.seite = wahl
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
+
 
 
 
