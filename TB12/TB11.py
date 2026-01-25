@@ -8,65 +8,14 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime
 import time
-from streamlit_autorefresh import st_autorefresh
-#hierfür pip install streamlit-autorefresh
 
 # ---------------------------------------------------
 # Basis Page-Klasse (abstrakt)
 # ---------------------------------------------------
 class Page(ABC):
-   @abstractmethod
-   def render(self):
-       pass
-
-#class Page(ABC):
-#    def render(self):
-##        self.render_header()
- #       self.render_body()
- #       self.render_footer()
-
-#    def render_header(self):
-#        pass
-
-#    @abstractmethod
- #   def render_body(self):
-#        pass
-
- #   def render_footer(self):
- #       pass
-
-
-class LayoutStrategy(ABC):
     @abstractmethod
-    def renderLayout(self, page):
+    def render(self):
         pass
-
-#----------------------------------------------------
-#Konkrete Strategien
-#----------------------------------------------------
-
-class OneColumnLayout(LayoutStrategy):
-    def renderLayout(self, page):
-        st.container()
-        page.render_body()
-
-class TwoColumnLayout(LayoutStrategy):
-    def renderLayout(self, page):
-        col1, col2 = st.columns(2)
-
-        with col1:
-            #hasattr = „hat Eigenschaft, aktuelle Seite, Name der Funktion
-            if hasattr(page, "render_left"):
-                #dann rufe diese Funktion auf
-                page.render_left()
-            else:
-                st.error("render_left() fehlt")
-
-        with col2:
-            if hasattr(page, "render_right"):
-                page.render_right()
-            else:
-                st.error("render_right() fehlt")
 
 
 # ---------------------------------------------------
@@ -90,64 +39,54 @@ def berechne_kennzahlen(df):
 # Startseite
 # ---------------------------------------------------
 class Startseite(Page):
-        def render(self):
-        #Konstuktor mit Methode und Parameter self==page
-            TwoColumnLayout().renderLayout(self) 
-      
-        
-        def render_left(self):
-            
-            st.title("🏠 Willkommen zur Analyse-App")
+    def render(self):
 
-            st.header("Überblick")
-            st.write(
-                "Diese Anwendung unterstützt die betriebswirtschaftliche Analyse, "
-                "die Erstellung von Ergebnisrechnungen sowie die Marktbeobachtung."
-            )
+        st.title("🏠 Willkommen zur Analyse-App")
 
-            st.header("Module")
+        st.header("Überblick")
+        st.write(
+            "Diese Anwendung unterstützt die betriebswirtschaftliche Analyse, "
+            "die Erstellung von Ergebnisrechnungen sowie die Marktbeobachtung."
+        )
 
-            st.subheader("📊 Bilanzanalyse")
-            st.write("Bilanzwerte für zwei Jahre, Kennzahlenberechnung und Export als PDF.")
-            if st.button("Zur Bilanzanalyse"):
-                st.session_state.seite = "📊 Bilanzanalyse"
-                st.rerun()
+        st.header("Module")
 
-            st.subheader("📑 Ergebnisrechnung")
-            st.write("Erstellung der Abgrenzung sowie RKI-, RKII- und Betriebsergebnisrechnung.")
-            if st.button("Zur Ergebnisrechnung"):
-                st.session_state.seite = "📑 Ergebnisrechnung"
-                st.rerun()
+        st.subheader("📊 Bilanzanalyse")
+        st.write("Bilanzwerte für zwei Jahre, Kennzahlenberechnung und Export als PDF.")
+        if st.button("Zur Bilanzanalyse"):
+            st.session_state.seite = "📊 Bilanzanalyse"
+            st.rerun()
 
-            st.subheader("🔗 Linkliste")
-            st.write("Sammlung nützlicher externer Fachquellen.")
-            if st.button("Zur Linkliste"):
-                st.session_state.seite = "🔗 Linkliste"
-                st.rerun()
+        st.subheader("📑 Ergebnisrechnung")
+        st.write("Erstellung der Abgrenzung sowie RKI-, RKII- und Betriebsergebnisrechnung.")
+        if st.button("Zur Ergebnisrechnung"):
+            st.session_state.seite = "📑 Ergebnisrechnung"
+            st.rerun()
 
-            st.subheader("📈 Indizes")
-            st.write("Live-Übersicht ausgewählter Börsenindizes.")
-            if st.button("Zu den Indizes"):
-                st.session_state.seite = "📈 Indizes"
-                st.rerun()
+        st.subheader("🔗 Linkliste")
+        st.write("Sammlung nützlicher externer Fachquellen.")
+        if st.button("Zur Linkliste"):
+            st.session_state.seite = "🔗 Linkliste"
+            st.rerun()
 
-            st.subheader("ⓘ Impressum")
-            st.write("Impressum und rechtliche Hinweise.")
-            if st.button("Zum Impressum"):
-                st.session_state.seite = "ⓘ Impressum"
-                st.rerun()
-                
-        def render_right(self):
-            st.image("BildMural1.png", caption="Mural Wuppertal", width ="stretch")
+        st.subheader("📈 Indizes")
+        st.write("Live-Übersicht ausgewählter Börsenindizes.")
+        if st.button("Zu den Indizes"):
+            st.session_state.seite = "📈 Indizes"
+            st.rerun()
+
+        st.subheader("ⓘ Impressum")
+        st.write("Impressum und rechtliche Hinweise.")
+        if st.button("Zum Impressum"):
+            st.session_state.seite = "ⓘ Impressum"
+            st.rerun()
+
 
 # ---------------------------------------------------
 # Bilanzanalyse
 # ---------------------------------------------------
 class Bilanzanalyse(Page):
     def render(self):
-        OneColumnLayout().renderLayout(self)
-    
-    def render_body(self):
         st.title("📊 Bilanzanalyse für 2 Jahre")
         st.header("📥 Eingabe der Bilanzwerte")
 
@@ -304,9 +243,6 @@ class Bilanzanalyse(Page):
 # ---------------------------------------------------
 class Ergebnisrechnung(Page):
     def render(self):
-        OneColumnLayout().renderLayout(self)
-    
-    def render_body(self):
         st.title("📑 Ergebnisrechnung (RKI / RKII / Betriebsergebnis)")
 
         # -----------------------------------
@@ -469,11 +405,6 @@ class Ergebnisrechnung(Page):
 # ---------------------------------------------------
 class Linkliste(Page):
     def render(self):
-        
-        TwoColumnLayout().renderLayout(self) 
-      
-        
-    def render_left(self):
         st.title("🔗 Nützliche Links")
 
         links = {
@@ -487,62 +418,81 @@ class Linkliste(Page):
 
         for name, url in links.items():
             st.markdown(f"🔹 **[{name}]({url})**")
-    def render_right(self):
-        st.image("Kunst1.jpg", width ="stretch")
-
 
 
 # ---------------------------------------------------
 # Weitere Anwendung
 # ---------------------------------------------------
 class Indizes(Page):
-    
     def render(self):
-        OneColumnLayout().renderLayout(self)
-
-    def render_body(self):
-        st.title("📈 Live-Indizes: DAX, Dow Jones & Shanghai Composite")
-        st.write("Automatische Aktualisierung alle 30 Sekunden")
-
-        # Autorefresh alle 30 Sekunden
-        st_autorefresh(interval=30*1000, key="refresh")
+        st.title("🧩 Indizes")   
+        #st.set_page_config(page_title="Live Börsenindizes", layout="wide")
 
         # -----------------------------
-        # Session-State initialisieren
+        # Session State initialisieren
         # -----------------------------
-        for key in ["zeiten", "dax", "dow", "shanghai"]:
-            if key not in st.session_state:
-                st.session_state[key] = []
+        if "zeiten" not in st.session_state:
+            st.session_state.zeiten = []
+        if "dax" not in st.session_state:
+            st.session_state.dax = []
+        if "dow" not in st.session_state:
+            st.session_state.dow = []
+        if "shanghai" not in st.session_state:
+            st.session_state.shanghai = []
+        if "last_update" not in st.session_state:
+            st.session_state.last_update = 0
 
-        # -----------------------------
-        # Funktion zum Abrufen der Indexwerte
-        # -----------------------------
+
+        # --------------------------------------
+        # Funktion zum Abrufen der Kursdaten
+        # --------------------------------------
         def get_index_value(ticker):
             try:
-                return yf.Ticker(ticker).info.get("regularMarketPrice")
+                return yf.Ticker(ticker).info.get("regularMarketPrice", None)
             except:
                 return None
 
-        # -----------------------------
-        # Daten updaten
-        # -----------------------------
-        now = datetime.now().strftime("%H:%M:%S")
-        dax = get_index_value("^GDAXI")
-        dow = get_index_value("^DJI")
-        shanghai = get_index_value("000001.SS")
 
-        if all(val is not None for val in [dax, dow, shanghai]):
-            st.session_state.zeiten.append(now)
-            st.session_state.dax.append(dax)
-            st.session_state.dow.append(dow)
-            st.session_state.shanghai.append(shanghai)
+        # --------------------------------------
+        # Live Daten aktualisieren (alle 30s)
+        # --------------------------------------
+        now_ts = time.time()
+        if now_ts - st.session_state.last_update > 30:   # alle 30 Sekunden
+            now = datetime.now().strftime("%H:%M:%S")
 
-            # Nur letzte 50 Werte behalten
-            for key in ["zeiten", "dax", "dow", "shanghai"]:
-                st.session_state[key] = st.session_state[key][-50:]
+            dax = get_index_value("^GDAXI")
+            dow = get_index_value("^DJI")
+            shanghai = get_index_value("000001.SS")
+
+            if dax and dow and shanghai:
+                st.session_state.zeiten.append(now)
+                st.session_state.dax.append(dax)
+                st.session_state.dow.append(dow)
+                st.session_state.shanghai.append(shanghai)
+
+            st.session_state.last_update = now_ts
+            st.rerun()
+
+
+
+        # --------------------------------------
+        # Streamlit Oberfläche
+        # --------------------------------------
+        st.title("📈 Live-Indizes: DAX, Dow Jones & Shanghai Composite")
+        st.write("Automatische Aktualisierung alle 30 Sekunden")
+
+        zeiten = st.session_state.zeiten[-50:]  # nur letzte 50 Werte
+        dax = st.session_state.dax[-50:]
+        dow = st.session_state.dow[-50:]
+        shanghai = st.session_state.shanghai[-50:]
 
         # -----------------------------
-        # Diagramm-Funktion
+        # Layout: 1 Zeile, 3 Spalten
+        # -----------------------------
+        col1, col2, col3 = st.columns(3)
+
+        # -----------------------------
+        # Diagramme
         # -----------------------------
         def plot_line(x, y, title, color):
             fig, ax = plt.subplots(figsize=(5, 3))
@@ -554,24 +504,19 @@ class Indizes(Page):
             plt.xticks(rotation=45)
             st.pyplot(fig)
 
-        # -----------------------------
-        # Diagramme in 3 Spalten
-        # -----------------------------
-        col1, col2, col3 = st.columns(3)
+
         with col1:
-            plot_line(st.session_state.zeiten, st.session_state.dax, "DAX", "blue")
+            plot_line(zeiten, dax, "DAX", "blue")
+
         with col2:
-            plot_line(st.session_state.zeiten, st.session_state.dow, "Dow Jones", "green")
+            plot_line(zeiten, dow, "Dow Jones", "green")
+
         with col3:
-            plot_line(st.session_state.zeiten, st.session_state.shanghai, "Shanghai Composite", "red")
+            plot_line(zeiten, shanghai, "Shanghai Composite", "red")
 
 
 class Impressum(Page):
-    def render(self):       
-        TwoColumnLayout().renderLayout(self) 
-      
-        
-    def render_left(self):     
+    def render(self):
 #Zeilenumbruch in MarkDown 2mal Leertaste am Zeilenende
         st.title("ⓘ Impressum")
         st.write("""
@@ -611,9 +556,6 @@ class Impressum(Page):
             bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. 
 
                     """)
-
-    def render_right(self):
-        st.image("TOM26.png", width ="stretch")
 
 
 # ---------------------------------------------------
@@ -659,8 +601,8 @@ st.markdown(
 
 # Sidebar-Logo
 st.sidebar.image(
-  #  für Git "https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/LogoMT.png",
-    "LogoMT.png", width=120
+    "https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/LogoMT.png",
+    width=120
 )
 
 # -----------------------------------
@@ -683,10 +625,5 @@ st.session_state.seite = wahl
 # Seite rendern
 seite_obj = PageFactory.create(wahl)
 seite_obj.render()
-
-
-
-
-
 
 
