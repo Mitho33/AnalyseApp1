@@ -3,7 +3,8 @@ pandas
 numpy
 matplotlib
 yfinance
-streamlit-autorefresh
+
+
 
 
 
