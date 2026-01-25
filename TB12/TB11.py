@@ -398,13 +398,13 @@ class Ergebnisrechnung(Page):
 
         summary_df = pd.DataFrame({
             "": ["Summe", "Saldo / Ergebnis"],
-            "Aufwand": [sums["Aufwand"],-saldo_rki],
+            "Aufwand": [sums["Aufwand"],None],
             "Ertrag": [sums["Ertrag"], saldo_rki],
-            "Neutrale Aufwendungen": [sums["Neutrale Aufwendungen"], -saldo_neutral],
+            "Neutrale Aufwendungen": [sums["Neutrale Aufwendungen"], None],
             "Neutrale Erträge": [sums["Neutrale Erträge"], saldo_neutral],
-            "Betriebliche Aufwendungen": [sums["Betriebliche Aufwendungen"], -saldo_korrektur],
+            "Betriebliche Aufwendungen": [sums["Betriebliche Aufwendungen"], None],
             "Verrechnete Kosten": [sums["Verrechnete Kosten"], saldo_korrektur],
-            "Kosten": [sums["Kosten"], -betriebsergebnis],
+            "Kosten": [sums["Kosten"], None],
             "Leistung": [sums["Leistung"], betriebsergebnis],
         })
 
@@ -714,6 +714,7 @@ st.divider()
 # Seite laden & anzeigen
 page = PageFactory.create(st.session_state.seite)
 page.render()
+
 
 
 
