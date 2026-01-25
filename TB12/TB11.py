@@ -38,7 +38,7 @@ class Page(ABC):
 
 class LayoutStrategy(ABC):
     @abstractmethod
-    def render(self, page):
+    def renderLayout(self, page):
         pass
 
 #----------------------------------------------------
@@ -46,16 +46,18 @@ class LayoutStrategy(ABC):
 #----------------------------------------------------
 
 class OneColumnLayout(LayoutStrategy):
-    def render(self, page):
+    def renderLayout(self, page):
         st.container()
         page.render_body()
 
 class TwoColumnLayout(LayoutStrategy):
-    def render(self, page):
+    def renderLayout(self, page):
         col1, col2 = st.columns(2)
 
         with col1:
+            #hasattr = „hat Eigenschaft, aktuelle Seite, Name der Funktion
             if hasattr(page, "render_left"):
+                #dann rufe diese Funktion auf
                 page.render_left()
             else:
                 st.error("render_left() fehlt")
@@ -89,8 +91,8 @@ def berechne_kennzahlen(df):
 # ---------------------------------------------------
 class Startseite(Page):
         def render(self):
-        
-            TwoColumnLayout().render(self) 
+        #Konstuktor mit Methode und Parameter self==page
+            TwoColumnLayout().renderLayout(self) 
       
         
         def render_left(self):
@@ -136,14 +138,14 @@ class Startseite(Page):
                 st.rerun()
                 
         def render_right(self):
-            st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/BildMural1.png", caption="Mural Wuppertal", width ="stretch")
+            st.image("BildMural1.png", caption="Mural Wuppertal", width ="stretch")
 
 # ---------------------------------------------------
 # Bilanzanalyse
 # ---------------------------------------------------
 class Bilanzanalyse(Page):
     def render(self):
-        OneColumnLayout().render(self)
+        OneColumnLayout().renderLayout(self)
     
     def render_body(self):
         st.title("📊 Bilanzanalyse für 2 Jahre")
@@ -302,7 +304,7 @@ class Bilanzanalyse(Page):
 # ---------------------------------------------------
 class Ergebnisrechnung(Page):
     def render(self):
-        OneColumnLayout().render(self)
+        OneColumnLayout().renderLayout(self)
     
     def render_body(self):
         st.title("📑 Ergebnisrechnung (RKI / RKII / Betriebsergebnis)")
@@ -468,7 +470,7 @@ class Ergebnisrechnung(Page):
 class Linkliste(Page):
     def render(self):
         
-        TwoColumnLayout().render(self) 
+        TwoColumnLayout().renderLayout(self) 
       
         
     def render_left(self):
@@ -486,7 +488,7 @@ class Linkliste(Page):
         for name, url in links.items():
             st.markdown(f"🔹 **[{name}]({url})**")
     def render_right(self):
-        st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/Kunst1.jpg", width ="stretch")
+        st.image("Kunst1.jpg", width ="stretch")
 
 
 
@@ -494,9 +496,9 @@ class Linkliste(Page):
 # Weitere Anwendung
 # ---------------------------------------------------
 class Indizes(Page):
-
+    
     def render(self):
-        OneColumnLayout().render(self)
+        OneColumnLayout().renderLayout(self)
 
     def render_body(self):
         st.title("📈 Live-Indizes: DAX, Dow Jones & Shanghai Composite")
@@ -566,7 +568,7 @@ class Indizes(Page):
 
 class Impressum(Page):
     def render(self):       
-        TwoColumnLayout().render(self) 
+        TwoColumnLayout().renderLayout(self) 
       
         
     def render_left(self):     
@@ -611,7 +613,7 @@ class Impressum(Page):
                     """)
 
     def render_right(self):
-        st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/TOM26.png", width = 250)
+        st.image("TOM26.png", width ="stretch")
 
 
 # ---------------------------------------------------
@@ -657,40 +659,61 @@ st.markdown(
 
 # Sidebar-Logo
 st.sidebar.image(
-    "https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/LogoMT.png",
-    width=120
+  #  für Git "https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/LogoMT.png",
+    "LogoMT.png", width=120
 )
 
 # -----------------------------------
 # Session State für Navigation
 # -----------------------------------
-if "seite" not in st.session_state:
-    st.session_state.seite = "🏠 Startseite"
+#if "seite" not in st.session_state:
+#    st.session_state.seite = "🏠 Startseite"
 
 
 # Sidebar-Auswahl der Seiten
-seiten = list(PageFactory._pages.keys())
-wahl = st.sidebar.radio(
-    "Seite auswählen:",
-    seiten,
-    index=seiten.index(st.session_state.seite)
-)
-st.session_state.seite = wahl
+#seiten = list(PageFactory._pages.keys())
+#wahl = st.sidebar.radio(
+ #   "Seite auswählen:",
+ #   seiten,
+  #  index=seiten.index(st.session_state.seite)
+#)
+#st.session_state.seite = wahl
 
+#seiten = list(PageFactory._pages.keys())
+#tabs = st.tabs(seiten)
+
+#for tab, seite in zip(tabs, seiten):
+#    with tab:
+#        PageFactory._pages[seite]()
 
 # Seite rendern
-seite_obj = PageFactory.create(wahl)
-seite_obj.render()
+#seite_obj = PageFactory.create(wahl)
+#seite_obj.render()
 
 
+st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 
+# Top-Navigation
+seiten = list(PageFactory._pages.keys())
 
+if "seite" not in st.session_state or st.session_state.seite not in seiten:
+    st.session_state.seite = "🏠 Startseite"
 
+cols = st.columns(len(seiten))
 
+for col, seite in zip(cols, seiten):
+    aktiv = seite == st.session_state.seite
+    label = f"➡️ {seite}" if aktiv else seite
 
+    if col.button(label, use_container_width=True):
+        st.session_state.seite = seite
+        st.rerun()
 
+st.divider()
 
-
+# Seite laden & anzeigen
+page = PageFactory.create(st.session_state.seite)
+page.render()
 
 
 
