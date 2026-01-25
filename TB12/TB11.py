@@ -138,7 +138,7 @@ class Startseite(Page):
                 st.rerun()
                 
         def render_right(self):
-            st.image("BildMural1.png", caption="Mural Wuppertal", width ="stretch")
+            st.image("BildMural1.png", caption="Mural Wuppertal",  use_container_width=True)
 
 # ---------------------------------------------------
 # Bilanzanalyse
@@ -488,7 +488,7 @@ class Linkliste(Page):
         for name, url in links.items():
             st.markdown(f"🔹 **[{name}]({url})**")
     def render_right(self):
-        st.image("Kunst1.jpg", width ="stretch")
+        st.image("Kunst1.jpg",  use_container_width=True)
 
 
 
@@ -613,7 +613,7 @@ class Impressum(Page):
                     """)
 
     def render_right(self):
-        st.image("TOM26.png", width ="stretch")
+        st.image("TOM26.png",  use_container_width=True)
 
 
 # ---------------------------------------------------
@@ -714,6 +714,7 @@ st.divider()
 # Seite laden & anzeigen
 page = PageFactory.create(st.session_state.seite)
 page.render()
+
 
 
 
