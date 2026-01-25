@@ -666,54 +666,26 @@ st.sidebar.image(
 # -----------------------------------
 # Session State für Navigation
 # -----------------------------------
-#if "seite" not in st.session_state:
-#    st.session_state.seite = "🏠 Startseite"
+if "seite" not in st.session_state:
+    st.session_state.seite = "🏠 Startseite"
 
 
 # Sidebar-Auswahl der Seiten
-#seiten = list(PageFactory._pages.keys())
-#wahl = st.sidebar.radio(
- #   "Seite auswählen:",
- #   seiten,
-  #  index=seiten.index(st.session_state.seite)
-#)
-#st.session_state.seite = wahl
+seiten = list(PageFactory._pages.keys())
+wahl = st.sidebar.radio(
+    "Seite auswählen:",
+    seiten,
+    index=seiten.index(st.session_state.seite)
+)
+st.session_state.seite = wahl
 
-#seiten = list(PageFactory._pages.keys())
-#tabs = st.tabs(seiten)
-
-#for tab, seite in zip(tabs, seiten):
-#    with tab:
-#        PageFactory._pages[seite]()
 
 # Seite rendern
-#seite_obj = PageFactory.create(wahl)
-#seite_obj.render()
+seite_obj = PageFactory.create(wahl)
+seite_obj.render()
 
 
-st.set_page_config(page_title="Bilanzanalyse", layout="wide")
 
-# Top-Navigation
-seiten = list(PageFactory._pages.keys())
-
-if "seite" not in st.session_state or st.session_state.seite not in seiten:
-    st.session_state.seite = "🏠 Startseite"
-
-cols = st.columns(len(seiten))
-
-for col, seite in zip(cols, seiten):
-    aktiv = seite == st.session_state.seite
-    label = f"➡️ {seite}" if aktiv else seite
-
-    if col.button(label, use_container_width=True):
-        st.session_state.seite = seite
-        st.rerun()
-
-st.divider()
-
-# Seite laden & anzeigen
-page = PageFactory.create(st.session_state.seite)
-page.render()
 
 
 
