@@ -138,7 +138,7 @@ class Startseite(Page):
                 st.rerun()
                 
         def render_right(self):
-            st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/BildMural1.png", caption="Mural Wuppertal",  width=stretch)
+            st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/BildMural1.png", caption="Mural Wuppertal",   use_container_width=True)
 
 # ---------------------------------------------------
 # Bilanzanalyse
@@ -714,6 +714,7 @@ st.divider()
 # Seite laden & anzeigen
 page = PageFactory.create(st.session_state.seite)
 page.render()
+
 
 
 
