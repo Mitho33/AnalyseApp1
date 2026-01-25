@@ -488,7 +488,7 @@ class Linkliste(Page):
         for name, url in links.items():
             st.markdown(f"🔹 **[{name}]({url})**")
     def render_right(self):
-        st.image("Kunst1.jpg",  use_container_width=True)
+        st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/Kunst1.jpg",  use_container_width=True)
 
 
 
@@ -613,7 +613,7 @@ class Impressum(Page):
                     """)
 
     def render_right(self):
-        st.image("TOM26.png",  use_container_width=True)
+        st.image("https://raw.githubusercontent.com/Mitho33/AnalyseApp1/main/TB12/TOM26.png",  use_container_width=True)
 
 
 # ---------------------------------------------------
@@ -714,6 +714,7 @@ st.divider()
 # Seite laden & anzeigen
 page = PageFactory.create(st.session_state.seite)
 page.render()
+
 
 
 
